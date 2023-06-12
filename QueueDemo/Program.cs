@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new UserQueueHandler();
 var cancellationTokenSource = new CancellationTokenSource();
-Task.Run(() => ledgerQueue.ProcessQueue(builder.Services, UserQueue.requestQueue, cancellationTokenSource.Token));
+Task task = Task.Run(() => ledgerQueue.ProcessQueue(builder.Services, UserQueue.requestQueue, cancellationTokenSource.Token));
 
 var app = builder.Build();
 

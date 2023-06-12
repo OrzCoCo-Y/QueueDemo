@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h1>RSA Encryption Demo</h1>
+
+<section>
+    <h2>Generate Key Pair</h2>
+    <button onclick="generateKeyPair()">Generate</button>
+    <p>Public Key: <span id="public-key"></span></p>
+    <p>Private Key: <span id="private-key"></span></p>
+</section>
+
+<section>
+    <h2>Encrypt with Public Key</h2>
+    <textarea id="data-to-encrypt" rows="4" cols="50"></textarea>
+    <button onclick="encryptWithPublicKey()">Encrypt</button>
+    <p>Encrypted Data: <span id="encrypted-data"></span></p>
+</section>
+
+<section>
+    <h2>Decrypt with Private Key</h2>
+    <button onclick="decryptWithPrivateKey()">Decrypt</button>
+    <p>Decrypted Data: <span id="decrypted-data"></span></p>
+</section>
+
+<section>
+    <h2>Sign with Private Key</h2>
+    <textarea id="data-to-sign" rows="4" cols="50"></textarea>
+    <button onclick="signWithPrivateKey()">Sign</button>
+    <p>Signature: <span id="signature"></span></p>
+</section>
+
+<section>
+    <h2>Verify with Public Key</h2>
+    <textarea id="data-to-verify" rows="4" cols="50"></textarea>
+    <button onclick="verifyWithPublicKey()">Verify</button>
+    <p>Verification Result: <span id="verification-result"></span></p>
+</section>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    // Function to generate key pair
+    function generateKeyPair() {
+        // Make an API call to generate key pair
+        $.ajax({
+            url: "/api/generate-key-pair",
+            method: "GET",
+            success: function (response) {
+                // Display generated key pair
+                $("#public-key").text(response.publicKey);
+                $("#private-key").text(response.privateKey);
+            },
+            error: function () {
+                alert("Error generating key pair");
+            }
+        });
+    }
+
+    // Function to encrypt data with public key
+    function encryptWithPublicKey() {
+        // Get data to encrypt
+        var data = $("#data-to-encrypt").val();
+
+        // Make an API call to encrypt with public key
+        $.ajax({
+            url: "/api/encrypt-with-public-key",
+            method: "POST",
+            data: { data: data },
+            success: function (response) {
+                // Display encrypted data
+                $("#encrypted-data").text(response.encryptedData);
+            },
+            error: function () {
+                alert("Error encrypting data");
+            }
+        });
+    }
+
+    // Function to decrypt data with private key
+    function decryptWithPrivateKey() {
+        // Get encrypted data to decrypt
+        var encryptedData = $("#encrypted-data").text();
+
+        // Make an API call to decrypt with private key
+        $.ajax({
+            url: "/api/decrypt-with-private-key",
+            method: "POST",
+            data: { encryptedData: encryptedData },
+            success: function (response) {
+                // Display decrypted data
+                $("#decrypted-data").text(response.decryptedData);
+            },
+            error: function () {
+                alert("Error decrypting data");
+            }
+        });
+    }
+
+    // Function to sign data with private key
+    function signWithPrivateKey() {
+        // Get data to sign
+        var data = $("#data-to-sign").val();
+
+        // Make an API call to sign with private key
+        $.ajax({
+            url: "/api/sign-with-private-key",
+            method: "POST",
+            data: { data: data },
+            success: function (response) {
+                // Display signature
+                $("#signature").text(response.signature);
+            },
+            error: function () {
+                alert("Error signing data");
+            }
+        });
+    }
+
+    // Function to verify data with public key
+    function verifyWithPublicKey() {
+        // Get data to verify
+        var data = $("#data-to-verify").val();
+        // Get signature to verify
+        var signature = $("#signature").text();
+
+        // Make an API call to verify with public key
+        $.ajax({
+            url: "/api/verify-with-public-key",
+            method: "POST",
+            data: { data: data, signature: signature },
+            success: function (response) {
+                // Display verification result
+                $("#verification-result").text(response.verificationResult);
+            },
+            error: function () {
+                alert("Error verifying data");
+            }
+        });
+    }
+</script>
