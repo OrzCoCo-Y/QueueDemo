@@ -7,7 +7,7 @@ namespace QueueDemo.Controllers
     public class UserController : ControllerBase
     {
         [HttpPost]
-        public bool enQueue(string email, string password)
+        public bool EnQueue(string email, string password)
         {
             return true;
         }

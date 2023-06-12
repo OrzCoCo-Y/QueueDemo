@@ -45,7 +45,7 @@
     function generateKeyPair() {
         // Make an API call to generate key pair
         $.ajax({
-            url: "/api/generate-key-pair",
+            url: "/api/RSA/generate-key-pair",
             method: "GET",
             success: function (response) {
                 // Display generated key pair
