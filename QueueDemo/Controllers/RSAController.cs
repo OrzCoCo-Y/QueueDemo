@@ -8,7 +8,7 @@ namespace QueueDemo.Controllers
     [ApiController]
     public class RSAController : ControllerBase
     {
-        [HttpPost("generate-key-pair")]
+        [HttpPost("keypair")]
         public GenerateResponse GenerateKeyPair()
         {
             RSAProcessing.GenerateKeys(out string publicKey, out string pricateKey);

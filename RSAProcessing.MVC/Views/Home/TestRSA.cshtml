@@ -4,49 +4,101 @@
 <h1>@ViewData["Title"]</h1>
 
 <h1>RSA Encryption Demo</h1>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <button type="button" class="btn btn-info btn-lg btn-block" onclick="generateKeyPair()">Generate</button>
+        <blockquote>
+            <p id="public-key">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+            </p> <small>----public</small>
+        </blockquote>
+        <blockquote>
+            <p id="private-key">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+            </p> <small>----private</small>
+        </blockquote>
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+                <h2>
+                    Encrypt with Public Key
+                </h2>
+                <textarea id="data-to-encrypt" rows="4" cols="50" class="form-control"></textarea>
+            </div>
+            <div class="col-md-4 column">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Panel title
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p id="public-key-1">
+                            wait for generate
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 column">
+                <h2>
+                    Encrypted
+                </h2>
+                <p id="encrypted-data">
+                    wait for Encrypt
+                </p>
+                <button type="button" class="btn btn-default btn-info btn-block" onclick="encryptWithPublicKey()">Encrypt with Public Key</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<section>
-    <h2>Generate Key Pair</h2>
-    <button onclick="generateKeyPair()">Generate</button>
-    <p>Public Key: <span id="public-key"></span></p>
-    <p>Private Key: <span id="private-key"></span></p>
-</section>
+@*
+<div class="container">
+    <h1 class="mt-4">RSA Encryption Demo</h1>
 
-<section>
-    <h2>Encrypt with Public Key</h2>
-    <textarea id="data-to-encrypt" rows="4" cols="50"></textarea>
-    <button onclick="encryptWithPublicKey()">Encrypt</button>
-    <p>Encrypted Data: <span id="encrypted-data"></span></p>
-</section>
+    <section class="mt-4">
+        <h2>Generate Key Pair</h2>
+        <button class="btn btn-primary" onclick="generateKeyPair()">Generate</button>
+        <p>Public Key: <span id="public-key"></span></p>
+        <p>Private Key: <span id="private-key"></span></p>
+    </section>
 
-<section>
-    <h2>Decrypt with Private Key</h2>
-    <button onclick="decryptWithPrivateKey()">Decrypt</button>
-    <p>Decrypted Data: <span id="decrypted-data"></span></p>
-</section>
+    <section class="mt-4">
+        <h2>Encrypt with Public Key</h2>
+        <textarea id="data-to-encrypt" rows="4" cols="50" class="form-control"></textarea>
+        <button class="btn btn-primary mt-2" onclick="encryptWithPublicKey()">Encrypt</button>
+        <p>Encrypted Data: <span id="encrypted-data"></span></p>
+    </section>
 
-<section>
-    <h2>Sign with Private Key</h2>
-    <textarea id="data-to-sign" rows="4" cols="50"></textarea>
-    <button onclick="signWithPrivateKey()">Sign</button>
-    <p>Signature: <span id="signature"></span></p>
-</section>
+    <section class="mt-4">
+        <h2>Decrypt with Private Key</h2>
+        <button class="btn btn-primary" onclick="decryptWithPrivateKey()">Decrypt</button>
+        <p>Decrypted Data: <span id="decrypted-data"></span></p>
+    </section>
 
-<section>
-    <h2>Verify with Public Key</h2>
-    <textarea id="data-to-verify" rows="4" cols="50"></textarea>
-    <button onclick="verifyWithPublicKey()">Verify</button>
-    <p>Verification Result: <span id="verification-result"></span></p>
-</section>
+    <section class="mt-4">
+        <h2>Sign with Private Key</h2>
+        <textarea id="data-to-sign" rows="4" cols="50" class="form-control"></textarea>
+        <button class="btn btn-primary mt-2" onclick="signWithPrivateKey()">Sign</button>
+        <p>Signature: <span id="signature"></span></p>
+    </section>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
+    <section class="mt-4">
+        <h2>Verify with Public Key</h2>
+        <textarea id="data-to-verify" rows="4" cols="50" class="form-control"></textarea>
+        <button class="btn btn-primary mt-2" onclick="verifyWithPublicKey()">Verify</button>
+        <p>Verification Result: <span id="verification-result"></span></p>
+    </section>
+</div>
+*@
+@*<script src="~/lib/jquery/dist/jquery.js"></script>*@
 <script>
+    let rsaHost = 'http://localhost:5102';
     // Function to generate key pair
     function generateKeyPair() {
         // Make an API call to generate key pair
         $.ajax({
-            url: "/api/RSA/generate-key-pair",
-            method: "GET",
+            url: rsaHost + "/api/rsa/keypair",
+            method: "POST",
             success: function (response) {
                 // Display generated key pair
                 $("#public-key").text(response.publicKey);

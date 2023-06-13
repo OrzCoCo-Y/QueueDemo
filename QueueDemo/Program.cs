@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new UserQueueHandler();
 var cancellationTokenSource = new CancellationTokenSource();
@@ -15,6 +25,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseCors();
 
 app.UseAuthorization();
 
