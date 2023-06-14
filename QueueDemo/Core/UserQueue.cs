@@ -6,6 +6,6 @@ namespace QueueDemo.Core
 {
     public static class UserQueue
     {
-        public static ConcurrentQueue<SecurityRequsetDto> requestQueue = new ConcurrentQueue<SecurityRequsetDto>();
+        public static ConcurrentQueue<DecryptRequest> requestQueue = new ConcurrentQueue<DecryptRequest>();
     }
 }

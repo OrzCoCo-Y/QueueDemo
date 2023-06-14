@@ -8,7 +8,7 @@ namespace QueueDemo.Core
 {
     public class UserQueueHandler
     {
-        public async Task ProcessQueue(IServiceCollection services, ConcurrentQueue<SecurityRequsetDto> requestQueue, CancellationToken cancellationToken)
+        public async Task ProcessQueue(IServiceCollection services, ConcurrentQueue<DecryptRequest> requestQueue, CancellationToken cancellationToken)
         {
             var serviceProvider = services.BuildServiceProvider();
             var myService = serviceProvider.GetRequiredService<IUserSecurityService>();
@@ -20,7 +20,7 @@ namespace QueueDemo.Core
                 {
                     break;
                 }
-                if (requestQueue.TryDequeue(out SecurityRequsetDto request))
+                if (requestQueue.TryDequeue(out DecryptRequest request))
                 {
                     await Console.Out.WriteLineAsync($"TryDequeue LeaseId{request.UserIndex} -- {JsonConvert.SerializeObject(request)} ");
                     try

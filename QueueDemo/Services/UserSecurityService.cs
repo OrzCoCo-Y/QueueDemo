@@ -10,7 +10,7 @@ namespace QueueDemo.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> EncryptedUserPwdByQueue(SecurityRequsetDto requsetDto)
+        public Task<bool> EncryptedUserPwdByQueue(DecryptRequest requsetDto)
         {
             throw new NotImplementedException();
         }
