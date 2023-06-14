@@ -28,13 +28,13 @@
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            Panel title
+                            Public Key
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <p id="public-key-1">
+                        <textarea rows="7" cols="50" id="public-key-1">
                             wait for generate
-                        </p>
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -42,54 +42,47 @@
                 <h2>
                     Encrypted
                 </h2>
-                <p id="encrypted-data">
+                <textarea readonly rows="4" cols="50" id="encrypted-data">
                     wait for Encrypt
-                </p>
+                </textarea>
                 <button type="button" class="btn btn-default btn-info btn-block" onclick="encryptWithPublicKey()">Encrypt with Public Key</button>
+            </div>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+                <h2>
+                    Decrypt with Private Key
+                </h2>
+                <textarea id="data-to-decrypt" rows="4" cols="50" class="form-control"></textarea>
+            </div>
+            <div class="col-md-4 column">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Private Key
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <textarea readonly rows="27" cols="50" id="private-key-1">
+                            wait for generate
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 column">
+                <h2>
+                    Decrypt
+                </h2>
+                <textarea readonly rows="4" cols="50" id="decrypted-data">
+                    wait for Decrypt
+                </textarea>
+                <button type="button" class="btn btn-default btn-info btn-block" onclick="decryptWithPrivateKey()">Decrypt with Private Key</button>
             </div>
         </div>
     </div>
 </div>
 
-@*
-<div class="container">
-    <h1 class="mt-4">RSA Encryption Demo</h1>
-
-    <section class="mt-4">
-        <h2>Generate Key Pair</h2>
-        <button class="btn btn-primary" onclick="generateKeyPair()">Generate</button>
-        <p>Public Key: <span id="public-key"></span></p>
-        <p>Private Key: <span id="private-key"></span></p>
-    </section>
-
-    <section class="mt-4">
-        <h2>Encrypt with Public Key</h2>
-        <textarea id="data-to-encrypt" rows="4" cols="50" class="form-control"></textarea>
-        <button class="btn btn-primary mt-2" onclick="encryptWithPublicKey()">Encrypt</button>
-        <p>Encrypted Data: <span id="encrypted-data"></span></p>
-    </section>
-
-    <section class="mt-4">
-        <h2>Decrypt with Private Key</h2>
-        <button class="btn btn-primary" onclick="decryptWithPrivateKey()">Decrypt</button>
-        <p>Decrypted Data: <span id="decrypted-data"></span></p>
-    </section>
-
-    <section class="mt-4">
-        <h2>Sign with Private Key</h2>
-        <textarea id="data-to-sign" rows="4" cols="50" class="form-control"></textarea>
-        <button class="btn btn-primary mt-2" onclick="signWithPrivateKey()">Sign</button>
-        <p>Signature: <span id="signature"></span></p>
-    </section>
-
-    <section class="mt-4">
-        <h2>Verify with Public Key</h2>
-        <textarea id="data-to-verify" rows="4" cols="50" class="form-control"></textarea>
-        <button class="btn btn-primary mt-2" onclick="verifyWithPublicKey()">Verify</button>
-        <p>Verification Result: <span id="verification-result"></span></p>
-    </section>
-</div>
-*@
 @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
 <script>
     let rsaHost = 'http://localhost:5102';
@@ -102,7 +95,9 @@
             success: function (response) {
                 // Display generated key pair
                 $("#public-key").text(response.publicKey);
+                $("#public-key-1").text(response.publicKey);
                 $("#private-key").text(response.privateKey);
+                $("#private-key-1").text(response.privateKey);
             },
             error: function () {
                 alert("Error generating key pair");
@@ -113,16 +108,21 @@
     // Function to encrypt data with public key
     function encryptWithPublicKey() {
         // Get data to encrypt
-        var data = $("#data-to-encrypt").val();
-
+        var plaintext = $("#data-to-encrypt").val();
+        var publicKey = $("#public-key-1").text();
         // Make an API call to encrypt with public key
         $.ajax({
-            url: "/api/encrypt-with-public-key",
+            url: rsaHost + "/api/rsa/encrypt",
             method: "POST",
-            data: { data: data },
+            contentType: "application/json",
+            data: JSON.stringify({
+                plaintext: plaintext,
+                PublicKey: publicKey
+            }),
             success: function (response) {
                 // Display encrypted data
-                $("#encrypted-data").text(response.encryptedData);
+                $("#encrypted-data").text(response.encryptedPwd);
+                $("#data-to-decrypt").text(response.encryptedPwd);
             },
             error: function () {
                 alert("Error encrypting data");
@@ -133,16 +133,21 @@
     // Function to decrypt data with private key
     function decryptWithPrivateKey() {
         // Get encrypted data to decrypt
-        var encryptedData = $("#encrypted-data").text();
-
+        var encryptedData = $("#data-to-decrypt").val();
+        var privateKey = $("#private-key-1").text();
+        debugger
         // Make an API call to decrypt with private key
         $.ajax({
-            url: "/api/decrypt-with-private-key",
+            url: rsaHost + "/api/rsa/decrypt",
             method: "POST",
-            data: { encryptedData: encryptedData },
+            contentType: "application/json",
+            data: JSON.stringify({
+                EncryptedPwd: encryptedData,
+                PrivateKey: privateKey
+            }),
             success: function (response) {
                 // Display decrypted data
-                $("#decrypted-data").text(response.decryptedData);
+                $("#decrypted-data").text(response.decryptedPwd);
             },
             error: function () {
                 alert("Error decrypting data");
@@ -158,8 +163,8 @@
         // Make an API call to sign with private key
         $.ajax({
             url: "/api/sign-with-private-key",
-            method: "POST",
-            data: { data: data },
+            method: 'application/json',
+            data: JSON.stringify({ data: data }),
             success: function (response) {
                 // Display signature
                 $("#signature").text(response.signature);
