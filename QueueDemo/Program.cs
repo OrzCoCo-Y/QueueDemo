@@ -1,4 +1,5 @@
 using QueueDemo.Core;
+using QueueDemo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+builder.Services.AddTransient<IUserSecurityService, UserSecurityService>();
 
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new UserQueueHandler();
