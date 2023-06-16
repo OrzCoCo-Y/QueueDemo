@@ -16,7 +16,7 @@ namespace QueueDemo.Controllers
         }
 
         [HttpPost("encrypt")]
-        public EncryptResponse Encrypt([FromBody]EncryptRequest request)
+        public EncryptResponse Encrypt([FromBody] EncryptRequest request)
         {
             var encryptedPwd = RSAProcessing.Encrypt(request.Plaintext, request.PublicKey);
             return new EncryptResponse(encryptedPwd, request.UserIndex);

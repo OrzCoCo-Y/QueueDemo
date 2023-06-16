@@ -83,7 +83,6 @@
     </div>
 </div>
 
-@*<script src="~/lib/jquery/dist/jquery.js"></script>*@
 <script>
     let rsaHost = 'http://localhost:5102';
     // Function to generate key pair
@@ -125,7 +124,7 @@
                 $("#data-to-decrypt").text(response.encryptedPwd);
             },
             error: function () {
-                alert("Error encrypting data");
+                alert("Error encrypting data"); 
             }
         });
     }

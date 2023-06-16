@@ -20,9 +20,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<IUserSecurityService, UserSecurityService>();
 
 // 创建并启动后台任务            
-UserQueueHandler ledgerQueue = new UserQueueHandler();
-var cancellationTokenSource = new CancellationTokenSource();
-Task task = Task.Run(() => ledgerQueue.ProcessQueue(builder.Services, UserQueue.requestQueue, cancellationTokenSource.Token));
+UserQueueHandler ledgerQueue = new();
+CancellationTokenSource cancellationTokenSource = new();
+Task task = Task.Run(() => ledgerQueue.ProcessQueue(builder.Services, cancellationTokenSource.Token));
 
 var app = builder.Build();
 
