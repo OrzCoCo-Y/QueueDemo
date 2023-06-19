@@ -6,23 +6,32 @@ namespace QueueDemo.Services
 {
     public class UserSecurityService : IUserSecurityService
     {
-        public async Task<bool> EncryptedUserPwdByQueue()
+        public bool EncryptedUserPwdByQueue()
         {
-            GlobalUserInfo.UserInfos.ForEach(async info =>
+            GlobalUserInfo.UserInfos.ForEach(info =>
             {
                 UserQueue.EncryptQueue.Enqueue(new EncryptRequest()
                 {
                     Plaintext = info.Pwd,
-                    PublicKey = GlobalSecretInfo.publicKey,
+                    PublicKey = GlobalSecretInfo.PublicKey,
                     UserIndex = info.Index
                 });
             });
             return true;
         }
 
-        public Task<bool> DecryptedUserPwdByQueue()
+        public bool DecryptedUserPwdByQueue()
         {
-            throw new NotImplementedException();
+            GlobalUserInfo.UserInfos.ForEach(info =>
+            {
+                UserQueue.DecryptQueue.Enqueue(new DecryptRequest()
+                {
+                    EncryptedPwd = info.EncryptedPwd,
+                    PrivateKey = GlobalSecretInfo.PrivateKey,
+                    UserIndex = info.Index
+                });
+            });
+            return true;
         }
     }
 }

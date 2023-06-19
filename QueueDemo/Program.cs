@@ -3,8 +3,6 @@ using QueueDemo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
@@ -18,15 +16,15 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddTransient<IUserSecurityService, UserSecurityService>();
+builder.Services.AddTransient<IRSAService, RSAService>();
 
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new();
-CancellationTokenSource cancellationTokenSource = new();
-Task task = Task.Run(() => ledgerQueue.ProcessQueue(builder.Services, cancellationTokenSource.Token));
+CancellationTokenSource cancelToken = new();
+Task task = Task.Run(() => ledgerQueue.DeProcessQueue(builder.Services, cancelToken.Token));
+Task task2 = Task.Run(() => ledgerQueue.EnProcessQueue(builder.Services, cancelToken.Token));
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 
 app.UseCors();
 

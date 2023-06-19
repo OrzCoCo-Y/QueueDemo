@@ -2,6 +2,7 @@
 using QueueDemo.Core;
 using QueueDemo.Model;
 using QueueDemo.Model.Dto;
+using QueueDemo.Services;
 
 namespace QueueDemo.Controllers
 {
@@ -9,17 +10,24 @@ namespace QueueDemo.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IUserSecurityService _userSecurityService;
+
+        public UserController(IUserSecurityService userSecurityService)
+        {
+            _userSecurityService = userSecurityService;
+        }
+
         [HttpPost("keypair")]
         public GenerateResponse GenerateKeys()
         {
             RSAProcessing.GenerateKeys(out string publicKey, out string pricateKey);
-            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.privateKey))
+            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.PrivateKey))
             {
-                GlobalSecretInfo.privateKey = pricateKey;
+                GlobalSecretInfo.PrivateKey = pricateKey;
             }
-            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.publicKey))
+            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.PublicKey))
             {
-                GlobalSecretInfo.publicKey = publicKey;
+                GlobalSecretInfo.PublicKey = publicKey;
             }
 
             return new GenerateResponse(publicKey, pricateKey);
@@ -34,13 +42,13 @@ namespace QueueDemo.Controllers
         [HttpPost("queue/encryption")]
         public bool EncryptEnQueue()
         {
-            return true;
+            return _userSecurityService.EncryptedUserPwdByQueue();
         }
 
         [HttpPost("queue/decryption")]
-        public bool DecryptEnQueue(string email, string password)
+        public bool DecryptEnQueue()
         {
-            return true;
+            return _userSecurityService.DecryptedUserPwdByQueue();
         }
     }
 }

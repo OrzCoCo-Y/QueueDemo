@@ -1,14 +1,22 @@
-﻿using QueueDemo.Model.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
+using QueueDemo.Core;
+using QueueDemo.Model.Dto;
 
 namespace QueueDemo.Services
 {
     public interface IUserSecurityService
     {
-        // 加密所有用户密码
+        /// <summary>
+        /// 入队-加密所有用户密码
+        /// </summary>
+        /// <returns></returns>
         bool EncryptedUserPwdByQueue();
 
-
-        // 解密所有用户密码
+        /// <summary>
+        /// 入队-解密所有用户密码-队列
+        /// </summary>
+        /// <returns></returns>
         bool DecryptedUserPwdByQueue();
+
     }
 }

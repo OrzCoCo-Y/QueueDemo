@@ -2,7 +2,7 @@
 {
     public static class GlobalSecretInfo
     {
-        public static string publicKey;
-        public static string privateKey;
+        public static string PublicKey;
+        public static string PrivateKey;
     }
 }
