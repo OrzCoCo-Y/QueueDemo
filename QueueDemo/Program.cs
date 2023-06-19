@@ -21,7 +21,7 @@ builder.Services.AddTransient<IRSAService, RSAService>();
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new();
 Task task = Task.Run(() => ledgerQueue.DeProcessQueue(builder.Services, UserQueue.DecryptCancelToken.Token));
-Task task2 = Task.Run(() => ledgerQueue.EnProcessQueue(builder.Services, UserQueue.DEncryptCancelToken.Token));
+Task task2 = Task.Run(() => ledgerQueue.EnProcessQueue(builder.Services, UserQueue.EncryptCancelToken.Token));
 
 var app = builder.Build();
 
