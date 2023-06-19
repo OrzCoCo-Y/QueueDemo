@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QueueDemo.Core;
 using QueueDemo.Model;
+using QueueDemo.Model.Dto;
 
 namespace QueueDemo.Controllers
 {
@@ -8,6 +9,22 @@ namespace QueueDemo.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        [HttpPost("keypair")]
+        public GenerateResponse GenerateKeys()
+        {
+            RSAProcessing.GenerateKeys(out string publicKey, out string pricateKey);
+            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.privateKey))
+            {
+                GlobalSecretInfo.privateKey = pricateKey;
+            }
+            if (string.IsNullOrWhiteSpace(GlobalSecretInfo.publicKey))
+            {
+                GlobalSecretInfo.publicKey = publicKey;
+            }
+
+            return new GenerateResponse(publicKey, pricateKey);
+        }
+
         [HttpGet("userlist")]
         public List<UserInfo> UserList()
         {
