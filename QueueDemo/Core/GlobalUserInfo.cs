@@ -1,9 +1,11 @@
-﻿using QueueDemo.Model;
+﻿using Microsoft.AspNetCore.SignalR;
+using QueueDemo.Model;
 
 namespace QueueDemo.Core
 {
     public static class GlobalUserInfo
     {
+        public static IHubCallerClients Clients;
 
         private static List<UserInfo> userInfos = new()
         {

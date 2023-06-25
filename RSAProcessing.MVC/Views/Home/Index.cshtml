@@ -7,7 +7,7 @@
             <blockquote>
                 <p id="PublicData">
                     Public Key :   Wait for  "生成公钥&私钥"
-                </p> 
+                </p>
             </blockquote>
             <blockquote>
                 <p id="PrivateData">
@@ -19,10 +19,10 @@
                     <button type="button" class="btn btn-default btn-success btn-block" id="generateBtn" onclick="generateKeyPair()">生成公钥&私钥</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-block btn-info" id="enQueueEncrypt">加入加密队列</button>
+                    <button type="button" class="btn btn-default btn-block btn-info" id="enQueueEncrypt" onclick="encrypt()">加入加密队列</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-primary btn-block" id="enQueueDecrypt">加入解密队列</button>
+                    <button type="button" class="btn btn-default btn-primary btn-block" id="enQueueDecrypt" onclick="decrypt()">加入解密队列</button>
                 </div>
             </div>
             <table id="userDataTable" class="table table-striped">
@@ -51,7 +51,7 @@
         </div>
     </div>
 </div>
-<div class="container">
+@*<div class="container">
     <div class="row p-1">
         <div class="col-1">User</div>
         <div class="col-5"><input type="text" id="userInput" /></div>
@@ -75,9 +75,9 @@
             <ul id="messagesList"></ul>
         </div>
     </div>
-</div>
+</div>*@
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
+@*<script src="~/js/chat.js"></script>*@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     let rsaHost = 'http://localhost:5102';
@@ -87,7 +87,7 @@
             method: "Get",
             success: function (response) {
                 // 在成功回调函数中处理数据
-                var tableData = response; // 假设接口返回的是包含对象的数组
+                var tableData = response;
 
                 // 遍历数据并动态创建<tr>元素，并将数据填充到<td>中
                 var tbody = $('#userDataTable tbody');
@@ -125,4 +125,59 @@
             }
         });
     }
+
+    function encrypt() {
+        // Make an API call to generate key pair
+        $.ajax({
+            url: rsaHost + "/api/user/queue/encryption",
+            method: "POST",
+            success: function (response) {
+                alert("encrypt Enqueue Success");
+            },
+            error: function () {
+                alert("encrypt Enqueue Fail");
+            }
+        });
+    }
+
+    function decrypt() {
+        // Make an API call to generate key pair
+        $.ajax({
+            url: rsaHost + "/api/user/queue/decryption",
+            method: "POST",
+            success: function (response) {
+                alert("decrypt Enqueue Success");
+            },
+            error: function () {
+                alert("decrypt Enqueue Fail");
+            }
+        });
+    }
+</script>
+
+
+<script>
+    let queueHost = 'http://localhost:5102';
+    var connection = new signalR.HubConnectionBuilder().withUrl(queueHost + "/queueHub").build();
+
+    connection.on("ReceiveEncrypt", function (userId, message) {
+        console.log(userId);
+        console.log(message);
+        // 使用特定 id 来定位并修改文本内容
+        $('#en_' + userId).text(message);
+    });
+
+    connection.on("ReceiveDecrypt", function (userId, message) {
+        console.log(userId);
+        console.log(message);
+        // 使用特定 id 来定位并修改文本内容
+        $('#de_' + userId).text(message);
+    });
+
+    connection.start().then(function () {
+        console.log("Connection Success")
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
 </script>

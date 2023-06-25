@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using QueueDemo.Model;
 using QueueDemo.Model.Dto;
 using QueueDemo.Services;
 
@@ -6,13 +7,20 @@ namespace QueueDemo.Core
 {
     public class UserQueueHandler
     {
+        private QueueHub _queueHub;
+        public UserQueueHandler(QueueHub queueHub)
+        {
+            _queueHub = queueHub;
+        }
+
         public async Task DeProcessQueue(IServiceCollection services, CancellationToken cancellationToken)
         {
             try
             {
                 var serviceProvider = services.BuildServiceProvider();
                 var rsaService = serviceProvider.GetRequiredService<IRSAService>();
-                await Console.Out.WriteLineAsync($"ProcessQueue Start! ");
+                await Console.Out.WriteLineAsync($"Decrypt ProcessQueue Start! ");
+
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -28,14 +36,21 @@ namespace QueueDemo.Core
                             var deScryptRsp = rsaService.Decrypt(deRequest);
                             if (deScryptRsp != null)
                             {
-                                GlobalUserInfo.UserInfos.First(x => x.Index == deScryptRsp.UserIndex).DecryptedPwd = deScryptRsp.DecryptedPwd;
-                                await Console.Out.WriteLineAsync($"DeProcessQueue Success! UserIndex--{deScryptRsp.UserIndex} ");
+                                var userInfo = GlobalUserInfo.UserInfos.First(x => x.Index == deScryptRsp.UserIndex);
+                                userInfo.DecryptedPwd = deScryptRsp.DecryptedPwd;
+                                await _queueHub.SendDecryptDequeue(userInfo.UserId, userInfo.DecryptedPwd);
+                                await Console.Out.WriteLineAsync($"DeProcessQueue Success! UserId--{userInfo.UserId} UserIndex--{deScryptRsp.UserIndex} ");
                             }
+                            await Task.Delay(1000);
                         }
                         catch (Exception ex)
                         {
                             await Console.Out.WriteLineAsync($"DeProcessQueue Error --{JsonConvert.SerializeObject(ex)} ");
                         }
+                    }
+                    else
+                    {
+                        await Task.Delay(10000);
                     }
                 }
             }
@@ -52,7 +67,8 @@ namespace QueueDemo.Core
             {
                 var serviceProvider = services.BuildServiceProvider();
                 var rsaService = serviceProvider.GetRequiredService<IRSAService>();
-                await Console.Out.WriteLineAsync($"ProcessQueue Start! ");
+                await Console.Out.WriteLineAsync($"Encrypt ProcessQueue Start! ");
+
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -66,12 +82,21 @@ namespace QueueDemo.Core
                         try
                         {
                             var enScryptRsp = rsaService.Encrypt(enRequest);
-                            await Console.Out.WriteLineAsync($"EnProcessQueue Success! UserIndex--{enRequest.UserIndex} ");
+                            var userInfo = GlobalUserInfo.UserInfos.First(x => x.Index == enScryptRsp.UserIndex);
+                            userInfo.EncryptedPwd = enScryptRsp.EncryptedPwd;
+
+                            await _queueHub.SendEncryptDequeue(userInfo.UserId, userInfo.EncryptedPwd);
+                            await Console.Out.WriteLineAsync($"EnProcessQueue Success! UserId--{userInfo.UserId} UserIndex--{enRequest.UserIndex} ");
+                            await Task.Delay(1000);
                         }
                         catch (Exception ex)
                         {
                             await Console.Out.WriteLineAsync($"EnProcessQueue Error --{JsonConvert.SerializeObject(ex)} ");
                         }
+                    }
+                    else
+                    {
+                        await Task.Delay(10000);
                     }
                 }
             }

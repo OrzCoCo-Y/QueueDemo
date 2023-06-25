@@ -8,6 +8,16 @@ namespace RSAProcessing.MVC
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
@@ -22,7 +32,7 @@ namespace RSAProcessing.MVC
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.MapControllerRoute(
