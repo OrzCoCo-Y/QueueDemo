@@ -1,32 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
             <blockquote>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-                </p> <small>Someone famous <cite>Source Title</cite></small>
+                <p id="PublicData">
+                    Public Key :   Wait for  "生成公钥&私钥"
+                </p> 
             </blockquote>
             <blockquote>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-                </p> <small>Someone famous <cite>Source Title</cite></small>
+                <p id="PrivateData">
+                    Private Key :   Wait for  "生成公钥&私钥"
+                </p>
             </blockquote>
             <div class="row clearfix">
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-success btn-block" id="generateBtn">生成公钥&私钥</button>
+                    <button type="button" class="btn btn-default btn-success btn-block" id="generateBtn" onclick="generateKeyPair()">生成公钥&私钥</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-block btn-info" id="">加入加密队列</button>
+                    <button type="button" class="btn btn-default btn-block btn-info" id="enQueueEncrypt">加入加密队列</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-primary btn-block">加入解密队列</button>
+                    <button type="button" class="btn btn-default btn-primary btn-block" id="enQueueDecrypt">加入解密队列</button>
                 </div>
             </div>
-            <table id="userDataTable" class="table">
+            <table id="userDataTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>UserID</th>
+                        <th>UserIndex</th>
+                        <th>Name</th>
+                        <th>Password</th>
+                        <th>Encrypted Password</th>
+                        <th>Decrypted Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>123456</td>
+                        <td>UA000001</td>
+                        <td>John Doe</td>
+                        <td>********</td>
+                        <td>2b5e7c9a3f</td>
+                        <td>password123</td>
+                    </tr>
+                    <!-- Add more rows for additional users -->
+                </tbody>
             </table>
         </div>
     </div>
@@ -58,37 +78,51 @@
 </div>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     let rsaHost = 'http://localhost:5102';
-    debugger
     $(function () {
-        $("#userDataTable").bootstrapTable({
+        $.ajax({
             url: rsaHost + "/api/user/userlist",
             method: "Get",
-            columns: [{
-                field: 'UserId',
-                title: 'ID'
-            }, {
-                field: 'Index',
-                title: '编号'
-            }, {
-                field: 'UserName',
-                title: '名字'
-            },
-            {
-                field: 'Pwd',
-                title: '密码'
-            },
-            {
-                field: 'EncryptedPwd',
-                title: '密文'
-            },
-            {
-                field: 'DecryptedPwd',
-                title: '明文'
-            }]
-        })
-    });
+            success: function (response) {
+                // 在成功回调函数中处理数据
+                var tableData = response; // 假设接口返回的是包含对象的数组
 
+                // 遍历数据并动态创建<tr>元素，并将数据填充到<td>中
+                var tbody = $('#userDataTable tbody');
+
+                console.log(response);
+                $.each(tableData, function (index, row) {
+                    var newRow = $('<tr>');
+                    newRow.append($('<td>').text(row.userId));
+                    newRow.append($('<td>').text(row.index));
+                    newRow.append($('<td>').text(row.userName));
+                    newRow.append($('<td>').text(row.pwd));
+                    newRow.append($('<td>').attr('id', 'en_' + row.userId).text(row.encryptedPwd));
+                    newRow.append($('<td>').attr('id', 'de_' + row.userId).text(row.decryptedPwd));
+                    tbody.append(newRow);
+                });
+            },
+            error: function () {
+                alert("Error generating key pair");
+            }
+        });
+    })
+
+    function generateKeyPair() {
+        // Make an API call to generate key pair
+        $.ajax({
+            url: rsaHost + "/api/user/keypair",
+            method: "POST",
+            success: function (response) {
+                // Display generated key pair
+                $("#PublicData").text(response.publicKey);
+                $("#PrivateData").text(response.privateKey);
+            },
+            error: function () {
+                alert("Error generating key pair");
+            }
+        });
+    }
 </script>
