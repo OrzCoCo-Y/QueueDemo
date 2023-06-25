@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace QueueDemo.Controllers
 {
+    /// <summary>
+    /// 默认接口  不用管
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

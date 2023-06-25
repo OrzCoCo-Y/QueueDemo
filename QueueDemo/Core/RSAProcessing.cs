@@ -3,9 +3,16 @@ using System.Text;
 
 namespace QueueDemo.Core
 {
+    /// <summary>
+    /// RSA加密处理程序
+    /// </summary>
     public static class RSAProcessing
     {
-        // 生成RSA密钥对
+        /// <summary>
+        ///  生成RSA密钥对
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <param name="privateKey"></param>
         public static void GenerateKeys(out string publicKey, out string privateKey)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
@@ -15,7 +22,12 @@ namespace QueueDemo.Core
             }
         }
 
-        // 使用公钥加密文本
+        /// <summary>
+        ///  使用公钥加密文本
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
         public static string Encrypt(string plainText, string publicKey)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
@@ -28,7 +40,12 @@ namespace QueueDemo.Core
             }
         }
 
-        // 使用私钥解密文本
+        /// <summary>
+        ///  使用私钥解密文本
+        /// </summary>
+        /// <param name="encryptedText"></param>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
         public static string Decrypt(string encryptedText, string privateKey)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
@@ -41,7 +58,12 @@ namespace QueueDemo.Core
             }
         }
 
-        // 使用私钥对文本进行签名
+        /// <summary>
+        ///  使用私钥对文本进行签名
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
         public static string Sign(string plainText, string privateKey)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
@@ -54,7 +76,13 @@ namespace QueueDemo.Core
             }
         }
 
-        // 使用公钥验证签名
+        /// <summary>
+        ///  使用公钥验证签名
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="signature"></param>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
         public static bool Verify(string plainText, string signature, string publicKey)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);

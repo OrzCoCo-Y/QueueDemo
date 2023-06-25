@@ -10,7 +10,7 @@ namespace QueueDemo.Services
         {
             GlobalUserInfo.UserInfos.ForEach(info =>
             {
-                UserQueue.EncryptQueue.Enqueue(new EncryptRequest()
+                GlobalUserQueue.EncryptQueue.Enqueue(new EncryptRequest()
                 {
                     Plaintext = info.Pwd,
                     PublicKey = GlobalSecretInfo.PublicKey,
@@ -24,7 +24,7 @@ namespace QueueDemo.Services
         {
             GlobalUserInfo.UserInfos.ForEach(info =>
             {
-                UserQueue.DecryptQueue.Enqueue(new DecryptRequest()
+                GlobalUserQueue.DecryptQueue.Enqueue(new DecryptRequest()
                 {
                     EncryptedPwd = info.EncryptedPwd,
                     PrivateKey = GlobalSecretInfo.PrivateKey,

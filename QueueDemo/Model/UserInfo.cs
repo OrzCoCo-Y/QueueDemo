@@ -1,5 +1,8 @@
 ﻿namespace QueueDemo.Model
 {
+    /// <summary>
+    /// 用户信息Model
+    /// </summary>
     public class UserInfo
     {
         public int UserId { get; set; }

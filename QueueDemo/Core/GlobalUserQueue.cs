@@ -3,7 +3,10 @@ using System.Collections.Concurrent;
 
 namespace QueueDemo.Core
 {
-    public static class UserQueue
+    /// <summary>
+    /// 全局用户队列初始化
+    /// </summary>
+    public static class GlobalUserQueue
     {
         /// <summary>
         /// 解密队列 退出循环开关
@@ -14,7 +17,14 @@ namespace QueueDemo.Core
         /// </summary>
         public static CancellationTokenSource EncryptCancelToken = new();
 
+        /// <summary>
+        /// 解密队列
+        /// </summary>
         public static ConcurrentQueue<DecryptRequest> DecryptQueue = new();
+
+        /// <summary>
+        /// 加密队列
+        /// </summary>
         public static ConcurrentQueue<EncryptRequest> EncryptQueue = new();
     }
 }

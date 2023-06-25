@@ -3,6 +3,9 @@ using QueueDemo.Model.Dto;
 
 namespace QueueDemo.Services
 {
+    /// <summary>
+    /// RSA 加解密服务
+    /// </summary>
     public class RSAService : IRSAService
     {
         public DecryptResponse Decrypt(DecryptRequest request)

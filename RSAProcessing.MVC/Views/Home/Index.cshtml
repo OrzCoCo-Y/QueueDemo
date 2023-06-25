@@ -6,26 +6,26 @@
         <div class="col-md-12 column">
             <blockquote>
                 <p id="PublicData">
-                    Public Key :   Wait for  "生成公钥&私钥"
+                    Public Key :   Wait for  "获取公钥&私钥"
                 </p>
             </blockquote>
             <blockquote>
                 <p id="PrivateData">
-                    Private Key :   Wait for  "生成公钥&私钥"
+                    Private Key :   Wait for  "获取公钥&私钥"
                 </p>
             </blockquote>
             <div class="row clearfix">
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-success btn-block" id="generateBtn" onclick="generateKeyPair()">生成公钥&私钥</button>
+                    <button type="button" class="btn btn-default btn-success btn-block" id="generateBtn" onclick="generateKeyPair()">Step 1 :获取公钥&私钥</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-block btn-info" id="enQueueEncrypt" onclick="encrypt()">加入加密队列</button>
+                    <button type="button" class="btn btn-default btn-block btn-info" id="enQueueEncrypt" onclick="encrypt()">Step 2 :加入加密队列</button>
                 </div>
                 <div class="col-md-4 column">
-                    <button type="button" class="btn btn-default btn-primary btn-block" id="enQueueDecrypt" onclick="decrypt()">加入解密队列</button>
+                    <button type="button" class="btn btn-default btn-primary btn-block" id="enQueueDecrypt" onclick="decrypt()">Step 3 :加入解密队列</button>
                 </div>
             </div>
-            <table id="userDataTable" class="table table-striped">
+            <table style="table-layout: fixed; word-break: break-all; word-wrap: break-word;" id="userDataTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>UserID</th>
@@ -40,44 +40,18 @@
                     <tr>
                         <td>123456</td>
                         <td>UA000001</td>
-                        <td>John Doe</td>
+                        <td>Test</td>
                         <td>********</td>
                         <td>2b5e7c9a3f</td>
                         <td>password123</td>
                     </tr>
-                    <!-- Add more rows for additional users -->
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@*<div class="container">
-    <div class="row p-1">
-        <div class="col-1">User</div>
-        <div class="col-5"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
-</div>*@
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-@*<script src="~/js/chat.js"></script>*@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     let rsaHost = 'http://localhost:5102';
@@ -110,13 +84,12 @@
         });
     })
 
+    //  生成秘钥
     function generateKeyPair() {
-        // Make an API call to generate key pair
         $.ajax({
             url: rsaHost + "/api/user/keypair",
             method: "POST",
             success: function (response) {
-                // Display generated key pair
                 $("#PublicData").text(response.publicKey);
                 $("#PrivateData").text(response.privateKey);
             },
@@ -126,6 +99,7 @@
         });
     }
 
+    // 加密
     function encrypt() {
         // Make an API call to generate key pair
         $.ajax({
@@ -140,6 +114,7 @@
         });
     }
 
+    // 解密
     function decrypt() {
         // Make an API call to generate key pair
         $.ajax({
@@ -158,8 +133,11 @@
 
 <script>
     let queueHost = 'http://localhost:5102';
+
+    // 创建signalR连接
     var connection = new signalR.HubConnectionBuilder().withUrl(queueHost + "/queueHub").build();
 
+    // 接收到  ReceiveEncrypt 的消息
     connection.on("ReceiveEncrypt", function (userId, message) {
         console.log(userId);
         console.log(message);
@@ -167,6 +145,7 @@
         $('#en_' + userId).text(message);
     });
 
+    //  接收到  ReceiveDecrypt 的消息
     connection.on("ReceiveDecrypt", function (userId, message) {
         console.log(userId);
         console.log(message);
@@ -174,6 +153,7 @@
         $('#de_' + userId).text(message);
     });
 
+    // 连接成功
     connection.start().then(function () {
         console.log("Connection Success")
     }).catch(function (err) {

@@ -3,10 +3,20 @@ using QueueDemo.Model;
 
 namespace QueueDemo.Core
 {
+    /// <summary>
+    /// 全局用户信息
+    /// </summary>
     public static class GlobalUserInfo
     {
+        /// <summary>
+        /// 已连接队列Hub的客户端
+        /// </summary>
         public static IHubCallerClients Clients;
 
+
+        /// <summary>
+        /// 构造用户信息
+        /// </summary>
         private static List<UserInfo> userInfos = new()
         {
             new UserInfo {UserId = 1, Index =  "U0000A1", UserName = "Us Z", Pwd = GenerateRandomPassword() },
@@ -31,6 +41,10 @@ namespace QueueDemo.Core
             new UserInfo {UserId = 20, Index =  "U0000A20", UserName = "Alexander Young", Pwd = GenerateRandomPassword() }
         };
 
+        /// <summary>
+        /// 自动生成密码
+        /// </summary>
+        /// <returns></returns>
         private static string GenerateRandomPassword()
         {
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -40,6 +54,9 @@ namespace QueueDemo.Core
             return password;
         }
 
+        /// <summary>
+        /// 用户信息 -- 内存
+        /// </summary>
         public static List<UserInfo> UserInfos
         {
             get { return userInfos; }

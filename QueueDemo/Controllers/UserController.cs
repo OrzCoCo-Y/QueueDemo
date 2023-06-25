@@ -12,11 +12,19 @@ namespace QueueDemo.Controllers
     {
         private readonly IUserSecurityService _userSecurityService;
 
+        /// <summary>
+        /// 注入用户安全服务
+        /// </summary>
+        /// <param name="userSecurityService"></param>
         public UserController(IUserSecurityService userSecurityService)
         {
             _userSecurityService = userSecurityService;
         }
 
+        /// <summary>
+        /// 获取秘钥
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("keypair")]
         public GenerateResponse GenerateKeys()
         {
@@ -33,18 +41,30 @@ namespace QueueDemo.Controllers
             return new GenerateResponse(publicKey, pricateKey);
         }
 
+        /// <summary>
+        /// 获取用户列表（内存）
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("userlist")]
         public List<UserInfo> UserList()
         {
             return GlobalUserInfo.UserInfos;
         }
 
+        /// <summary>
+        /// 加密队列
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("queue/encryption")]
         public bool EncryptEnQueue()
         {
             return _userSecurityService.EncryptedUserPwdByQueue();
         }
 
+        /// <summary>
+        /// 解密队列
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("queue/decryption")]
         public bool DecryptEnQueue()
         {

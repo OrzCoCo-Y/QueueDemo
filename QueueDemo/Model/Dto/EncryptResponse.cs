@@ -1,5 +1,8 @@
 ﻿namespace QueueDemo.Model.Dto
 {
+    /// <summary>
+    /// 加密回应DTO
+    /// </summary>
     public class EncryptResponse
     {
         public EncryptResponse(string encryptedPwd, string userIndex)

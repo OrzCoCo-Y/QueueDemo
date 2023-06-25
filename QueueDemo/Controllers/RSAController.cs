@@ -8,6 +8,10 @@ namespace QueueDemo.Controllers
     [ApiController]
     public class RSAController : ControllerBase
     {
+        /// <summary>
+        /// 生成秘钥
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("keypair")]
         public GenerateResponse GenerateKeyPair()
         {
@@ -15,6 +19,11 @@ namespace QueueDemo.Controllers
             return new GenerateResponse(publicKey, pricateKey);
         }
 
+        /// <summary>
+        /// 加密
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("encrypt")]
         public EncryptResponse Encrypt([FromBody] EncryptRequest request)
         {
@@ -22,6 +31,11 @@ namespace QueueDemo.Controllers
             return new EncryptResponse(encryptedPwd, request.UserIndex);
         }
 
+        /// <summary>
+        /// 解密
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("decrypt")]
         public DecryptResponse Decrypt([FromBody] DecryptRequest request)
         {
@@ -29,6 +43,11 @@ namespace QueueDemo.Controllers
             return new DecryptResponse(request.UserIndex, request.EncryptedPwd, decryptedText);
         }
 
+        /// <summary>
+        /// 签名
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("sign")]
         public SignResponse Sign([FromBody] SignRequest request)
         {
@@ -36,6 +55,11 @@ namespace QueueDemo.Controllers
             return new SignResponse(request.UserIndex, signText);
         }
 
+        /// <summary>
+        /// 校验签名
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("verify")]
         public VerifyResponse Verify([FromBody] VerifyRequest request)
         {

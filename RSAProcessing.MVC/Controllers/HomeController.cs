@@ -13,11 +13,19 @@ namespace RSAProcessing.MVC.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// 进入首页
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// 测试RSA页面
+        /// </summary>
+        /// <returns></returns>
         public IActionResult TestRSA()
         {
             return View();

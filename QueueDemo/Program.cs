@@ -22,8 +22,8 @@ builder.Services.AddSignalR();
 
 // 创建并启动后台任务            
 UserQueueHandler ledgerQueue = new(new QueueHub());
-Task task = Task.Run(() => ledgerQueue.DeProcessQueue(builder.Services, UserQueue.DecryptCancelToken.Token));
-Task task2 = Task.Run(() => ledgerQueue.EnProcessQueue(builder.Services, UserQueue.EncryptCancelToken.Token));
+Task task = Task.Run(() => ledgerQueue.DeProcessQueue(builder.Services, GlobalUserQueue.DecryptCancelToken.Token));
+Task task2 = Task.Run(() => ledgerQueue.EnProcessQueue(builder.Services, GlobalUserQueue.EncryptCancelToken.Token));
 
 var app = builder.Build();
 

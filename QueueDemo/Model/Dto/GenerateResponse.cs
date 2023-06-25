@@ -1,6 +1,8 @@
-﻿using System.Security.Cryptography.X509Certificates;
-namespace QueueDemo.Model.Dto
+﻿namespace QueueDemo.Model.Dto
 {
+    /// <summary>
+    /// 生成秘钥回应DTO
+    /// </summary>
     public class GenerateResponse
     {
         public GenerateResponse(string publicKey, string privateKey)

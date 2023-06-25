@@ -2,6 +2,9 @@
 
 namespace QueueDemo.Services
 {
+    /// <summary>
+    /// RSA 加解密接口
+    /// </summary>
     public interface IRSAService
     {
         /// <summary>

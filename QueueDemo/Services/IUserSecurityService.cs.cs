@@ -4,6 +4,9 @@ using QueueDemo.Model.Dto;
 
 namespace QueueDemo.Services
 {
+    /// <summary>
+    /// 用户安全服务
+    /// </summary>
     public interface IUserSecurityService
     {
         /// <summary>

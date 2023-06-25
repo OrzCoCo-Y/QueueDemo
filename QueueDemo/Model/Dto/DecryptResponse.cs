@@ -1,5 +1,8 @@
 ﻿namespace QueueDemo.Model.Dto
 {
+    /// <summary>
+    /// 解密回应DTO
+    /// </summary>
     public class DecryptResponse
     {
         public DecryptResponse(string userIndex, string encryptedPwd, string decryptedPwd)
